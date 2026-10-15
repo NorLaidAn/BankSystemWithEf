@@ -1,6 +1,6 @@
 namespace BankSystem.Services.Models;
 
-internal class AccountOwner
+public class AccountOwner
 {
     private string Firstname { get; set; }
     private string Lastname { get; set; }

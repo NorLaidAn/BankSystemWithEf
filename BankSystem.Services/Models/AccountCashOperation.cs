@@ -2,7 +2,7 @@ using System.Globalization;
 
 namespace BankSystem.Services.Models;
 
-internal class AccountCashOperation
+public class AccountCashOperation
 {
     private decimal Amount { get; set; }
     private DateTime Date { get; set; }

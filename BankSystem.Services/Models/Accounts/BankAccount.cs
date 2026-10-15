@@ -4,12 +4,12 @@ namespace BankSystem.Services.Models.Accounts;
 
 public abstract class BankAccount
 {
-    public string Number { get; private set; }
-    public decimal Balance { get; private set; }
-    public string CurrencyCode { get; private set; }
-    public AccountOwner AccountOwner { get; private set; }
-    public int BonusPoints { get; private set; }
-    public abstract decimal Overdraft { get; set; }
+    public string Number { get; protected set; }
+    public decimal Balance { get; protected set; }
+    public string CurrencyCode { get; protected set; }
+    public AccountOwner AccountOwner { get; protected set; }
+    public int BonusPoints { get; protected set; }
+    public abstract decimal Overdraft { get; }
 
     protected BankAccount(
         AccountOwner owner,
@@ -75,7 +75,7 @@ public abstract class BankAccount
         return $"{this.Overdraft} {this.AccountOwner} No:{this.Number}. Balance: {this.Balance}{this.CurrencyCode}. \n";
     }
 
-    public abstract void CalculateDepositBonusPoints();
+    public abstract decimal CalculateDepositBonusPoints();
 
-    public abstract void CalculateWithdrawBonusPoints();
+    public abstract decimal CalculateWithdrawBonusPoints();
 }

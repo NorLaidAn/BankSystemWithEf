@@ -75,7 +75,8 @@ public abstract class BankAccount
         return $"{this.Overdraft} {this.AccountOwner} No:{this.Number}. Balance: {this.Balance}{this.CurrencyCode}. \n";
     }
 
-    public abstract decimal CalculateDepositBonusPoints();
+    // не понятно насчет того что возвращают, но думаю пока будет decimal, а не вывод в консоль или что-то такое
+    public abstract decimal CalculateDepositBonusPoints(decimal deposit);
 
-    public abstract decimal CalculateWithdrawBonusPoints();
+    public abstract decimal CalculateWithdrawBonusPoints(decimal withdraw);
 }

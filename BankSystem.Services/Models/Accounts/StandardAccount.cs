@@ -4,7 +4,8 @@ namespace BankSystem.Services.Models.Accounts;
 
 public class StandardAccount : BankAccount
 {
-    private const decimal StandardBalanceCostPerPoint = 100; // не уверен пока с типом данных тут, но пусть будет decimal с перспективой на будущее
+    // не уверен пока с типом данных тут, но пусть будет decimal с перспективой на будущее
+    private const decimal StandardBalanceCostPerPoint = 100;
 
     public override decimal Overdraft { get => 0; }
 
@@ -24,7 +25,8 @@ public class StandardAccount : BankAccount
 
     }
 
-    public StandardAccount(AccountOwner owner,
+    public StandardAccount(
+        AccountOwner owner,
         string currencyCode,
         IUniqueNumberGenerator uniqueNumberGenerator,
         decimal initialBalance) : base(owner, currencyCode, uniqueNumberGenerator, initialBalance)
@@ -32,7 +34,8 @@ public class StandardAccount : BankAccount
 
     }
 
-    public StandardAccount(AccountOwner owner,
+    public StandardAccount(
+        AccountOwner owner,
         string currencyCode,
         Func<string> numberGenerator,
         decimal initialBalance) : base(owner, currencyCode, numberGenerator, initialBalance)
@@ -40,15 +43,15 @@ public class StandardAccount : BankAccount
 
     }
 
-    // в этих 2 функциях пока не понятно, в описании указано что они должны принимать decimal amount, но при этом в указанной формуле не учавствует, пока будет так
-    // бонусом не понятно насчет того что возвращают, но думаю пока обычный ретурн сойдет
-    public override decimal CalculateDepositBonusPoints()
+    public override decimal CalculateDepositBonusPoints(decimal deposit)
     {
-        return Math.Max(Math.Floor(this.Balance / StandardBalanceCostPerPoint), 0);
+        return Math.Max(
+            Math.Floor(this.Balance / StandardBalanceCostPerPoint), 0);
     }
 
-    public override decimal CalculateWithdrawBonusPoints()
+    public override decimal CalculateWithdrawBonusPoints(decimal withdraw)
     {
-        return Math.Max(Math.Floor(this.Balance / StandardBalanceCostPerPoint), 0);
+        return Math.Max(
+            Math.Floor(this.Balance / StandardBalanceCostPerPoint), 0);
     }
 }

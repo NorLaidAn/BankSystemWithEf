@@ -1,3 +1,6 @@
+using System.Globalization;
+using BankSystem.Services.Helpers;
+
 namespace BankSystem.Services.Generators;
 
 public class BasedOnTickUniqueNumberGenerator : IUniqueNumberGenerator
@@ -11,6 +14,8 @@ public class BasedOnTickUniqueNumberGenerator : IUniqueNumberGenerator
 
     public string Generate()
     {
-        throw new NotImplementedException(); // имплминтировать метод генерации
+        return CryptoHelper.GenerateHash(
+            (DateTime.UtcNow.Ticks - this.startingPoint.Ticks)
+            .ToString(CultureInfo.InvariantCulture));
     }
 }

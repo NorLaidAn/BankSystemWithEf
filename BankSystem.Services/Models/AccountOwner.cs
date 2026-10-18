@@ -1,16 +1,22 @@
+using BankSystem.Services.Models.Accounts;
+
 namespace BankSystem.Services.Models;
 
 public class AccountOwner
 {
-    private string Firstname { get; set; }
-    private string Lastname { get; set; }
-    private string Email { get; set; }
+    private readonly List<BankAccount> _accounts = [];
+    private readonly IReadOnlyList<BankAccount> _readOnlyAccounts;
+    public string Firstname { get; set; }
+    public string Lastname { get; set; }
+    public string Email { get; set; }
 
     public AccountOwner(string firstname, string lastname, string email)
     {
         this.Firstname = firstname;
         this.Lastname = lastname;
         this.Email = email;
+
+        this._readOnlyAccounts = this._accounts.AsReadOnly();
     }
 
     public override string ToString()
@@ -18,13 +24,13 @@ public class AccountOwner
         return $"{this.Firstname} {this.Lastname}, {this.Email}.";
     }
 
-    public void Add()
+    public void Add(BankAccount accountToAdd)
     {
-        throw new NotImplementedException();
+        this._accounts.Add(accountToAdd);
     }
 
-    public void Accounts()
+    public IReadOnlyList<BankAccount> Accounts()
     {
-        throw new NotImplementedException();
+        return this._readOnlyAccounts;
     }
 }

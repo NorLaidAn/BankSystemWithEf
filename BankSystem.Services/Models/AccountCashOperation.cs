@@ -4,9 +4,9 @@ namespace BankSystem.Services.Models;
 
 public class AccountCashOperation
 {
-    private decimal Amount { get; set; }
-    private DateTime Date { get; set; }
-    private string Note { get; set; }
+    public decimal Amount { get; set; }
+    public DateTime Date { get; set; }
+    public string Note { get; set; }
 
     public AccountCashOperation(decimal amount, DateTime date, string note)
     {

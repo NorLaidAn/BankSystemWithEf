@@ -4,6 +4,9 @@ namespace BankSystem.Services.Models.Accounts;
 
 public abstract class BankAccount
 {
+    private readonly List<AccountCashOperation> _operations = [];
+    private readonly IReadOnlyList<AccountCashOperation> _readOnlyOperations;
+
     public string Number { get; protected set; }
     public decimal Balance { get; protected set; }
     public string CurrencyCode { get; protected set; }
@@ -18,7 +21,6 @@ public abstract class BankAccount
     {
         ArgumentNullException.ThrowIfNull(uniqueNumberGenerator);
 
-
         this.Number = uniqueNumberGenerator.Generate();
     }
 
@@ -29,7 +31,6 @@ public abstract class BankAccount
     {
         ArgumentNullException.ThrowIfNull(numberGenerator);
 
-
         this.Number = numberGenerator();
     }
 
@@ -38,7 +39,7 @@ public abstract class BankAccount
         IUniqueNumberGenerator uniqueNumberGenerator,
         decimal initialBalance) : this(owner, currencyCode, uniqueNumberGenerator)
     {
-        this.Balance = initialBalance;
+        this.Deposit(initialBalance, DateTime.UtcNow, "Initial balance");
     }
 
     protected BankAccount(AccountOwner owner,
@@ -46,28 +47,50 @@ public abstract class BankAccount
         Func<string> numberGenerator,
         decimal initialBalance) : this(owner, currencyCode, numberGenerator)
     {
-        this.Balance = initialBalance; // очень хотелось обойти дублирование тут, но не придумал как
+        this.Deposit(initialBalance, DateTime.UtcNow, "Initial balance");
     }
 
     private BankAccount(AccountOwner owner, string currencyCode)
     {
+        ArgumentNullException.ThrowIfNull(owner);
+
         this.AccountOwner = owner;
         this.CurrencyCode = currencyCode;
+
+        owner.Add(this);
+
+        this._readOnlyOperations = this._operations.AsReadOnly();
     }
 
-    public void GetAllOperations()
+    public IReadOnlyList<AccountCashOperation> GetAllOperations()
     {
-        throw new NotImplementedException();
+        return this._readOnlyOperations;
     }
 
-    public void Deposit(decimal amount, string note)
+    public void Deposit(decimal amount, DateTime date, string note)
     {
-        throw new NotImplementedException();
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(amount);
+
+        this.Balance += amount;
+
+        AccountCashOperation operation = new AccountCashOperation(amount, date, note);
+        this._operations.Add(operation);
+
+        // здесь явное приведение к инт, так как это общее место вызова функции которая рассчитывает бонус и там есть округление
+        // но я не уверен оставить приведение тут, или поставить в каждом из методов расчета бонуса, ибо будет много дублирования
+        this.BonusPoints += (int)this.CalculateDepositBonusPoints(amount);
     }
 
-    public void Withdraw(decimal amount, string note)
+    public void Withdraw(decimal amount, DateTime date, string note)
     {
-        throw new NotImplementedException();
+        ArgumentOutOfRangeException.ThrowIfGreaterThan(amount, this.Balance + this.Overdraft);
+
+        this.Balance -= amount;
+
+        AccountCashOperation operation = new AccountCashOperation(-amount, date, note);
+        this._operations.Add(operation);
+
+        this.BonusPoints += (int)this.CalculateWithdrawBonusPoints(amount);
     }
 
     public override string ToString()
@@ -75,8 +98,8 @@ public abstract class BankAccount
         return $"{this.Overdraft} {this.AccountOwner} No:{this.Number}. Balance: {this.Balance}{this.CurrencyCode}. \n";
     }
 
-    // не понятно насчет того что возвращают, но думаю пока будет decimal, а не вывод в консоль или что-то такое
-    public abstract decimal CalculateDepositBonusPoints(decimal deposit);
+    // не понятно насчет того что возвращают, но думаю пока будет decimal, дабы не делать в каждом из наследников приведение к int
+    protected abstract decimal CalculateDepositBonusPoints(decimal deposit);
 
-    public abstract decimal CalculateWithdrawBonusPoints(decimal withdraw);
+    protected abstract decimal CalculateWithdrawBonusPoints(decimal withdraw);
 }

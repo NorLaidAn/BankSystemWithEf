@@ -4,11 +4,21 @@ namespace BankSystem.Services.Models.Accounts;
 
 public class SilverAccount : BankAccount
 {
+    #region Fields
+
     private const decimal SilverDepositCostPerPoint = 5;
     private const decimal SilverWithdrawCostPerPoint = 2;
     private const decimal SilverBalanceCostPerPoint = 100;
 
+    #endregion
+
+    #region Properties
+
     public override decimal Overdraft { get => 2 * this.BonusPoints; }
+
+    #endregion
+
+    #region Constructors
 
     public SilverAccount(
         AccountOwner owner,
@@ -44,6 +54,10 @@ public class SilverAccount : BankAccount
 
     }
 
+    #endregion
+
+    #region Methods
+
     public override decimal CalculateDepositBonusPoints(decimal deposit)
     {
         return Math.Max(
@@ -57,4 +71,6 @@ public class SilverAccount : BankAccount
             Math.Floor(
                 (this.Balance / SilverBalanceCostPerPoint) + (withdraw / SilverWithdrawCostPerPoint)), 0);
     }
+
+    #endregion
 }

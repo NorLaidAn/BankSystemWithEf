@@ -5,12 +5,22 @@ namespace BankSystem.Services.Generators;
 
 public class BasedOnTickUniqueNumberGenerator : IUniqueNumberGenerator
 {
+    #region Properties
+
     private DateTime startingPoint { get; }
+
+    #endregion
+
+    #region Constructors
 
     public BasedOnTickUniqueNumberGenerator(DateTime startingPoint)
     {
         this.startingPoint = startingPoint;
     }
+
+    #endregion
+
+    #region Methods
 
     public string Generate()
     {
@@ -18,4 +28,6 @@ public class BasedOnTickUniqueNumberGenerator : IUniqueNumberGenerator
             (DateTime.UtcNow.Ticks - this.startingPoint.Ticks)
             .ToString(CultureInfo.InvariantCulture));
     }
+
+    #endregion
 }

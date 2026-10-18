@@ -4,10 +4,20 @@ namespace BankSystem.Services.Models.Accounts;
 
 public class StandardAccount : BankAccount
 {
+    #region Fields
+
     // не уверен пока с типом данных тут, но пусть будет decimal с перспективой на будущее
     private const decimal StandardBalanceCostPerPoint = 100;
 
+    #endregion
+
+    #region Properties
+
     public override decimal Overdraft { get => 0; }
+
+    #endregion
+
+    #region Constructors
 
     public StandardAccount(
         AccountOwner owner,
@@ -43,6 +53,10 @@ public class StandardAccount : BankAccount
 
     }
 
+    #endregion
+
+    #region Methods
+
     public override decimal CalculateDepositBonusPoints(decimal deposit)
     {
         return Math.Max(
@@ -54,4 +68,6 @@ public class StandardAccount : BankAccount
         return Math.Max(
             Math.Floor(this.Balance / StandardBalanceCostPerPoint), 0);
     }
+
+    #endregion
 }

@@ -4,11 +4,21 @@ namespace BankSystem.Services.Models.Accounts;
 
 public class GoldAccount : BankAccount
 {
+    #region Fields
+
     private const decimal GoldDepositCostPerPoint = 10;
     private const decimal GoldWithdrawCostPerPoint = 5;
     private const decimal GoldBalanceCostPerPoint = 5;
 
+    #endregion
+
+    #region Properties
+
     public override decimal Overdraft { get => 3 * this.BonusPoints; }
+
+    #endregion
+
+    #region Constructors
 
     public GoldAccount(
         AccountOwner owner,
@@ -44,6 +54,10 @@ public class GoldAccount : BankAccount
 
     }
 
+    #endregion
+
+    #region Methods
+
     public override decimal CalculateDepositBonusPoints(decimal deposit)
     {
         return Math.Max(
@@ -57,4 +71,6 @@ public class GoldAccount : BankAccount
             Math.Ceiling(
                 (this.Balance / GoldBalanceCostPerPoint) + (withdraw / GoldWithdrawCostPerPoint)), 0);
     }
+
+    #endregion
 }

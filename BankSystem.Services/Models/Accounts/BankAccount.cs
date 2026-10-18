@@ -4,8 +4,14 @@ namespace BankSystem.Services.Models.Accounts;
 
 public abstract class BankAccount
 {
+    #region Fields
+
     private readonly List<AccountCashOperation> _operations = [];
     private readonly IReadOnlyList<AccountCashOperation> _readOnlyOperations;
+
+    #endregion
+
+    #region Properties
 
     public string Number { get; protected set; }
     public decimal Balance { get; protected set; }
@@ -13,6 +19,10 @@ public abstract class BankAccount
     public AccountOwner AccountOwner { get; protected set; }
     public int BonusPoints { get; protected set; }
     public abstract decimal Overdraft { get; }
+
+    #endregion
+
+    #region Constructors
 
     protected BankAccount(
         AccountOwner owner,
@@ -53,6 +63,7 @@ public abstract class BankAccount
     private BankAccount(AccountOwner owner, string currencyCode)
     {
         ArgumentNullException.ThrowIfNull(owner);
+        ArgumentNullException.ThrowIfNull(currencyCode);
 
         this.AccountOwner = owner;
         this.CurrencyCode = currencyCode;
@@ -61,6 +72,10 @@ public abstract class BankAccount
 
         this._readOnlyOperations = this._operations.AsReadOnly();
     }
+
+    #endregion
+
+    #region Methods
 
     public IReadOnlyList<AccountCashOperation> GetAllOperations()
     {
@@ -102,4 +117,6 @@ public abstract class BankAccount
     protected abstract decimal CalculateDepositBonusPoints(decimal deposit);
 
     protected abstract decimal CalculateWithdrawBonusPoints(decimal withdraw);
+
+    #endregion
 }

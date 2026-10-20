@@ -57,13 +57,13 @@ public class StandardAccount : BankAccount
 
     #region Methods
 
-    public override decimal CalculateDepositBonusPoints(decimal deposit)
+    protected override decimal CalculateDepositBonusPoints(decimal deposit)
     {
         return Math.Max(
             Math.Floor(this.Balance / StandardBalanceCostPerPoint), 0);
     }
 
-    public override decimal CalculateWithdrawBonusPoints(decimal withdraw)
+    protected override decimal CalculateWithdrawBonusPoints(decimal withdraw)
     {
         return Math.Max(
             Math.Floor(this.Balance / StandardBalanceCostPerPoint), 0);

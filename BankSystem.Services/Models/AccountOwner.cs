@@ -1,4 +1,5 @@
 using BankSystem.Services.Models.Accounts;
+using BankSystem.Services.Helpers;
 
 namespace BankSystem.Services.Models;
 
@@ -13,9 +14,29 @@ public class AccountOwner
 
     #region Properties
 
-    public string Firstname { get; set; }
-    public string Lastname { get; set; }
-    public string Email { get; set; }
+    public string Firstname
+    {
+        get;
+        private set => field = value.ValidateStringNotNullOrEmptyOrWhiteSpace(nameof(this.Firstname));
+    }
+    public string Lastname
+    {
+        get;
+        private set => field = value.ValidateStringNotNullOrEmptyOrWhiteSpace(nameof(this.Lastname));
+    }
+    public string Email
+    {
+        get;
+        private set
+        {
+            if (!value.IsEmailValid())
+            {
+                throw new ArgumentException("Invalid email address.", nameof(value));
+            }
+
+            field = value;
+        }
+    }
 
     #endregion
 
@@ -23,11 +44,6 @@ public class AccountOwner
 
     public AccountOwner(string firstname, string lastname, string email)
     {
-        // вообще так предполагаю для проверок создается отдельынй хелппер статик класс с определенного рода проверками значений, но предположу что нам здесь это излишне
-        ArgumentNullException.ThrowIfNull(firstname);
-        ArgumentNullException.ThrowIfNull(lastname);
-        ArgumentNullException.ThrowIfNull(email);
-
         this.Firstname = firstname;
         this.Lastname = lastname;
         this.Email = email;

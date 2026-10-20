@@ -1,4 +1,5 @@
 using BankSystem.Services.Generators;
+using BankSystem.Services.Helpers;
 
 namespace BankSystem.Services.Models.Accounts;
 
@@ -13,11 +14,39 @@ public abstract class BankAccount
 
     #region Properties
 
-    public string Number { get; protected set; }
-    public decimal Balance { get; protected set; }
-    public string CurrencyCode { get; protected set; }
-    public AccountOwner AccountOwner { get; protected set; }
-    public int BonusPoints { get; protected set; }
+    public string Number
+    {
+        get;
+        protected set => field = value.ValidateStringNotNullOrEmptyOrWhiteSpace(nameof(this.Number));
+    }
+    public decimal Balance
+    {
+        get;
+        protected set => field = value.ValidateNotNull(nameof(this.Number));
+    }
+    public string CurrencyCode
+    {
+        get;
+        protected set
+        {
+            if (!value.IsCurrencyValid())
+            {
+                throw new ArgumentException("Invalid currency code", nameof(value));
+            }
+
+            field = value.ToUpperInvariant();
+        }
+    }
+    public AccountOwner AccountOwner
+    {
+        get;
+        protected set => field = value.ValidateNotNull(nameof(this.Number));
+    }
+    public int BonusPoints
+    {
+        get;
+        protected set => field = value.ValidateNotNull(nameof(this.Number));
+    }
     public abstract decimal Overdraft { get; }
 
     #endregion
@@ -60,11 +89,10 @@ public abstract class BankAccount
         this.Deposit(initialBalance, DateTime.UtcNow, "Initial balance");
     }
 
+
+    // решил не трогать этот варнинг, ведь во всех публичных конструкторах есть присваивание значение свойству Number что по факту главное, а дабы его убрать будет куча велосипедов
     private BankAccount(AccountOwner owner, string currencyCode)
     {
-        ArgumentNullException.ThrowIfNull(owner);
-        ArgumentNullException.ThrowIfNull(currencyCode);
-
         this.AccountOwner = owner;
         this.CurrencyCode = currencyCode;
 
@@ -92,7 +120,7 @@ public abstract class BankAccount
         this._operations.Add(operation);
 
         // здесь явное приведение к инт, так как это общее место вызова функции которая рассчитывает бонус и там есть округление
-        // но я не уверен оставить приведение тут, или поставить в каждом из методов расчета бонуса, ибо будет много дублирования
+        // но я не уверен оставить приведение тут, или поставить в каждом из методов расчета бонуса однако будет много дублирования
         this.BonusPoints += (int)this.CalculateDepositBonusPoints(amount);
     }
 

@@ -28,10 +28,16 @@ public static class ValidationService
         return MailAddress.TryCreate(email, out _);
     }
 
-    // метод валидации на нулл для свойств
-    public static string ValidateNotNull(string value)
+    // методы вне задания для валидаации свойств
+    public static T ValidateNotNull<T>(this T value, string? paramName = null)
     {
-        ArgumentNullException.ThrowIfNull(value);
+        ArgumentNullException.ThrowIfNull(value, paramName);
+        return value;
+    }
+
+    public static string ValidateStringNotNullOrEmptyOrWhiteSpace(this string value, string? paramName = null)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(value, paramName);
         return value;
     }
 }

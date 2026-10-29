@@ -53,6 +53,8 @@ public abstract class BankAccount
 
     #region Constructors
 
+    // тут варнинг на owner ведь он считает что публичный конструктор должен проверять на нулл перед передачей переменной,
+    // однако у меня проверка происходит именно в базовом конструкторе дабы не повторять себя проверками
     protected BankAccount(
         AccountOwner owner,
         string currencyCode,

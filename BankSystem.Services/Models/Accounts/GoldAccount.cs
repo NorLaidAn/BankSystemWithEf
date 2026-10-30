@@ -58,14 +58,14 @@ public class GoldAccount : BankAccount
 
     #region Methods
 
-    protected override decimal CalculateDepositBonusPoints(decimal deposit)
+    protected override decimal CalculateDepositRewardPoints(decimal deposit)
     {
         return Math.Max(
             Math.Ceiling(
                 (this.Balance / GoldBalanceCostPerPoint) + (deposit / GoldDepositCostPerPoint)), 0);
     }
 
-    protected override decimal CalculateWithdrawBonusPoints(decimal withdraw)
+    protected override decimal CalculateWithdrawRewardPoints(decimal withdraw)
     {
         return Math.Max(
             Math.Ceiling(

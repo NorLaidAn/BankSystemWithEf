@@ -12,15 +12,18 @@ public class BankAccount
     public int Id { get; set; }
 
     [Column("account_owner_id", TypeName = "int")]
+    [ForeignKey(nameof(AccountOwner))]
     public int AccountOwnerId { get; set; }
 
     [Column("account_number", TypeName = "char(20)")]
+    [MaxLength(20)]
     public string Number { get; set; }
 
     [Column("balance", TypeName = "real")]
     public decimal Balance { get; set; }
 
     [Column("currency_code_id", TypeName = "int")]
+    [ForeignKey(nameof(CurrencyCode))]
     public int CurrencyCodeId { get; set; }
 
     [Column("bonus_points", TypeName = "int")]
@@ -29,9 +32,7 @@ public class BankAccount
     [Column("overdraft", TypeName = "real")]
     public decimal Overdraft { get; set; }
 
-    [ForeignKey(nameof(AccountOwnerId))]
     public AccountOwner AccountOwner { get; set; }
 
-    [ForeignKey(nameof(CurrencyCodeId))]
     public CurrencyCode CurrencyCode { get; set; }
 }

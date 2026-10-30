@@ -19,6 +19,6 @@ public class AccountCashOperation
     {
         string operation = this.Amount >= 0 ? "Credited to account" : "Debited from account";
 
-        return string.Format(CultureInfo.InvariantCulture, "{0:MM/dd/yyyy HH:mm:ss} {1} : {2} {3}", this.Date, this.Note, operation, this.Amount);
+        return string.Format(CultureInfo.InvariantCulture, "{0:MM/dd/yyyy HH:mm:ss} {1} : {2} {3}.", this.Date, this.Note, operation, this.Amount);
     }
 }

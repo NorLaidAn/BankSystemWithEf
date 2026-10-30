@@ -123,19 +123,22 @@ public abstract class BankAccount
 
         // здесь явное приведение к инт, так как это общее место вызова функции которая рассчитывает бонус и там есть округление
         // но я не уверен оставить приведение тут, или поставить в каждом из методов расчета бонуса однако будет много дублирования
-        this.BonusPoints += (int)this.CalculateDepositBonusPoints(amount);
+        this.BonusPoints += (int)this.CalculateDepositRewardPoints(amount);
     }
 
     public void Withdraw(decimal amount, DateTime date, string note)
     {
-        ArgumentOutOfRangeException.ThrowIfGreaterThan(amount, this.Balance + this.Overdraft);
+        if (amount > this.Balance + this.Overdraft)
+        {
+            throw new InvalidOperationException();
+        }
 
         this.Balance -= amount;
 
         AccountCashOperation operation = new AccountCashOperation(-amount, date, note);
         this._operations.Add(operation);
 
-        this.BonusPoints += (int)this.CalculateWithdrawBonusPoints(amount);
+        this.BonusPoints += (int)this.CalculateWithdrawRewardPoints(amount);
     }
 
     public override string ToString()
@@ -144,9 +147,9 @@ public abstract class BankAccount
     }
 
     // не понятно насчет того что возвращают, но думаю пока будет decimal, дабы не делать в каждом из наследников приведение к int
-    protected abstract decimal CalculateDepositBonusPoints(decimal deposit);
+    protected abstract decimal CalculateDepositRewardPoints(decimal deposit);
 
-    protected abstract decimal CalculateWithdrawBonusPoints(decimal withdraw);
+    protected abstract decimal CalculateWithdrawRewardPoints(decimal withdraw);
 
     #endregion
 }

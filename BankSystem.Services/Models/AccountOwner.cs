@@ -14,15 +14,15 @@ public class AccountOwner
 
     #region Properties
 
-    public string Firstname
+    public string FirstName
     {
         get;
-        private set => field = value.ValidateStringNotNullOrEmptyOrWhiteSpace(nameof(this.Firstname));
+        private set => field = value.ValidateStringNotNullOrEmptyOrWhiteSpace(nameof(this.FirstName));
     }
-    public string Lastname
+    public string LastName
     {
         get;
-        private set => field = value.ValidateStringNotNullOrEmptyOrWhiteSpace(nameof(this.Lastname));
+        private set => field = value.ValidateStringNotNullOrEmptyOrWhiteSpace(nameof(this.LastName));
     }
     public string Email
     {
@@ -44,8 +44,8 @@ public class AccountOwner
 
     public AccountOwner(string firstname, string lastname, string email)
     {
-        this.Firstname = firstname;
-        this.Lastname = lastname;
+        this.FirstName = firstname;
+        this.LastName = lastname;
         this.Email = email;
 
         this._readOnlyAccounts = this._accounts.AsReadOnly();
@@ -57,7 +57,7 @@ public class AccountOwner
 
     public override string ToString()
     {
-        return $"{this.Firstname} {this.Lastname}, {this.Email}.";
+        return $"{this.FirstName} {this.LastName}, {this.Email}.";
     }
 
     public void Add(BankAccount accountToAdd)
